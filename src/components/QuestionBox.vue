@@ -15,8 +15,6 @@
         <b-list-group-item button>{{answer}}</b-list-group-item>
       </b-list-group>
 
-      <!-- <p v-for="(answer, index) in answers" :key="index">{{answer}}</p> -->
-
       <b-button
         variant="primary"
         v-on:click="submitAnswer"
@@ -84,7 +82,7 @@ export default {
         this.question.correct_answer
       );
     },
-    answeredClass(answer) {
+    answeredClass(index) {
       let answerClass = "";
       if (this.answered && this.correctIndex === index) {
         answerClass = "correct";
