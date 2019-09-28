@@ -5,13 +5,23 @@
       {{question.question}}
       <hr class="my-4" />
 
-      <b-list-group v-for="(answer, index) in answers" :key="index" @click="selectAnswer(index)">
+      <b-list-group
+        v-for="(answer, index) in answers"
+        :key="index"
+        @click.prevent="selectAnswer(index)"
+        :class="[
+         answeredClass(index)]"
+      >
         <b-list-group-item button>{{answer}}</b-list-group-item>
       </b-list-group>
 
       <!-- <p v-for="(answer, index) in answers" :key="index">{{answer}}</p> -->
 
-      <b-button variant="primary" v-on:click="submitAnswer">Submit</b-button>
+      <b-button
+        variant="primary"
+        v-on:click="submitAnswer"
+        :disabled="selectedIndex === null || answered"
+      >Submit</b-button>
       <b-button @click="next" variant="success" href="#">Next</b-button>
     </b-jumbotron>
   </div>
@@ -22,12 +32,15 @@ import _ from "lodash";
 export default {
   props: {
     question: Object,
-    next: Function
+    next: Function,
+    increment: Function
   },
   data() {
     return {
       selectedIndex: null,
-      shuffledAnswers: []
+      correctIndex: null,
+      shuffledAnswers: [],
+      answered: false
     };
   },
   computed: {
@@ -42,6 +55,7 @@ export default {
       immediate: true,
       handler() {
         this.selectedIndex = null;
+        this.answered = false;
         this.shuffleAnswers();
       }
     }
@@ -49,7 +63,15 @@ export default {
   methods: {
     selectAnswer(index) {
       this.selectedIndex = index;
-      console.log(this.selectedIndex);
+    },
+    submitAnswer() {
+      let isCorrect = false;
+
+      if (this.selectedIndex === this.correctIndex) {
+        isCorrect = true;
+      }
+      this.answered = true;
+      this.increment(isCorrect);
     },
     shuffleAnswers() {
       let answers = [
@@ -57,6 +79,24 @@ export default {
         this.question.correct_answer
       ];
       this.shuffledAnswers = _.shuffle(answers);
+      //need to fix this so it shows the true answer, not the index.
+      this.correctIndex = this.shuffledAnswers.indexOf(
+        this.question.correct_answer
+      );
+    },
+    answeredClass(answer) {
+      let answerClass = "";
+      if (this.answered && this.correctIndex === index) {
+        answerClass = "correct";
+      } else if (
+        this.answered &&
+        this.selectedIndex === index &&
+        this.correctIndex !== index
+      ) {
+        answerClass = "incorrect";
+      }
+
+      return answerClass;
     }
   }
 };
