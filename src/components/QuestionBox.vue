@@ -8,7 +8,7 @@
       <b-list-group
         v-for="(answer, index) in answers"
         :key="index"
-        @click.prevent="selectAnswer(index)"
+        @click.prevent="selectAnswer(answer)"
         :class="[
          answeredClass(index)]"
       >
@@ -79,9 +79,7 @@ export default {
       ];
       this.shuffledAnswers = _.shuffle(answers);
       //need to fix this so it shows the true answer, not the index.
-      this.correctIndex = this.shuffledAnswers.indexOf(
-        this.question.correct_answer
-      );
+      this.correctIndex = this.question.correct_answer;
     },
     answeredClass(index) {
       let answerClass = "";
