@@ -9,10 +9,8 @@
         v-for="(answer, index) in answers"
         :key="index"
         @click.prevent="selectAnswer(answer)"
-        :class="[
-         answeredClass(answer)]"
       >
-        <b-list-group-item button>{{answer}}</b-list-group-item>
+        <b-list-group-item button :variant="answeredClass(answer)">{{answer}}</b-list-group-item>
       </b-list-group>
 
       <b-button
@@ -45,7 +43,6 @@ export default {
     answers() {
       let answers = [...this.question.incorrect_answers];
       answers.push(this.question.correct_answer);
-      console.log(answers);
       return answers;
     }
   },
@@ -84,13 +81,14 @@ export default {
     answeredClass(index) {
       let answerClass = "";
       if (this.answered && this.correctAnswer === index) {
-        answerClass = "correct";
+        answerClass = "success";
       } else if (
         this.answered &&
         this.selectedAnswer === index &&
         this.correctAnswer !== index
       ) {
-        answerClass = "incorrect";
+        answerClass = "danger";
+        alert("Sorry wrong answer!");
       }
 
       return answerClass;
