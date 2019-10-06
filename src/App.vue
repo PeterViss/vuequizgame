@@ -19,7 +19,6 @@
 <script>
 import Header from "./components/Header.vue";
 import QuestionBox from "./components/QuestionBox.vue";
-
 export default {
   name: "app",
   components: {
@@ -49,7 +48,7 @@ export default {
   mounted: function() {
     fetch("https://opentdb.com/api.php?amount=10&category=28&type=multiple")
       .then(resp => resp.json())
-      .then(data => (this.questions = data.results));
+      .then(data => console.log(data.results));
   }
 };
 </script>

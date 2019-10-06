@@ -45,6 +45,7 @@ export default {
     answers() {
       let answers = [...this.question.incorrect_answers];
       answers.push(this.question.correct_answer);
+      console.log(answers);
       return answers;
     }
   },
