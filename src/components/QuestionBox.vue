@@ -10,7 +10,7 @@
         :key="index"
         @click.prevent="selectAnswer(answer)"
         :class="[
-         answeredClass(index)]"
+         answeredClass(answer)]"
       >
         <b-list-group-item button>{{answer}}</b-list-group-item>
       </b-list-group>
@@ -18,7 +18,7 @@
       <b-button
         variant="primary"
         v-on:click="submitAnswer"
-        :disabled="selectedIndex === null || answered"
+        :disabled="selectedAnswer === null || answered"
       >Submit</b-button>
       <b-button @click="next" variant="success" href="#">Next</b-button>
     </b-jumbotron>
@@ -35,8 +35,8 @@ export default {
   },
   data() {
     return {
-      selectedIndex: null,
-      correctIndex: null,
+      selectedAnswer: null,
+      correctAnswer: null,
       shuffledAnswers: [],
       answered: false
     };
@@ -60,13 +60,13 @@ export default {
     }
   },
   methods: {
-    selectAnswer(index) {
-      this.selectedIndex = index;
+    selectAnswer(answer) {
+      this.selectedAnswer = answer;
     },
     submitAnswer() {
       let isCorrect = false;
 
-      if (this.selectedIndex === this.correctIndex) {
+      if (this.selectedAnswer === this.correctAnswer) {
         isCorrect = true;
       }
       this.answered = true;
@@ -78,17 +78,17 @@ export default {
         this.question.correct_answer
       ];
       this.shuffledAnswers = _.shuffle(answers);
-      //need to fix this so it shows the true answer, not the index.
-      this.correctIndex = this.question.correct_answer;
+
+      this.correctAnswer = this.question.correct_answer;
     },
     answeredClass(index) {
       let answerClass = "";
-      if (this.answered && this.correctIndex === index) {
+      if (this.answered && this.correctAnswer === index) {
         answerClass = "correct";
       } else if (
         this.answered &&
-        this.selectedIndex === index &&
-        this.correctIndex !== index
+        this.selectedAnswer === index &&
+        this.correctAnswer !== index
       ) {
         answerClass = "incorrect";
       }
